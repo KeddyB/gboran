@@ -1,11 +1,7 @@
+import { AuthProvider } from '@/components/auth-provider'
 import { ThemeProvider } from "@/components/theme-provider"
-import { ThemeToggle } from "@/components/theme-toggle"
+import { LayoutWrapper } from "@/components/layout-wrapper"
 import "./globals.css"
-
-export const metadata = {
-  title: 'Okeogboran Chronicle',
-  description: 'Discover the charm of our enchanting town',
-}
 
 export default function RootLayout({
   children,
@@ -15,15 +11,18 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-          <ThemeToggle />
-        </ThemeProvider>
+        <AuthProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <LayoutWrapper>
+              {children}
+            </LayoutWrapper>
+          </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
   )
