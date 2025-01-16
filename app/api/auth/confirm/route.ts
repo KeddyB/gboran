@@ -37,3 +37,4 @@ export async function GET(req: Request) {
     return NextResponse.json({ message: 'Error confirming email' }, { status: 500 })
   }
 }
+

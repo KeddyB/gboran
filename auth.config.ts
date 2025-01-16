@@ -43,7 +43,8 @@ export const authConfig: AuthConfig = {
             id: user._id,
             name: user.name,
             email: user.email,
-            hasPaid: user.hasPaid
+            hasPaid: user.hasPaid,
+            isVerified: user.isVerified
           }
         } catch (error) {
           console.error('Auth error:', error)
@@ -57,42 +58,14 @@ export const authConfig: AuthConfig = {
     error: '/login',
   },
   callbacks: {
-    async signIn({ user, account }) {
-      if (account?.provider === 'google') {
-        try {
-          const existingUser = await client.fetch(
-            `*[_type == "user" && email == $email][0]`,
-            { email: user.email }
-          )
-
-          if (!existingUser) {
-            const newUser = await client.create({
-              _type: 'user',
-              name: user.name,
-              email: user.email,
-              hasPaid: false,
-            })
-            user.id = newUser._id
-            user.hasPaid = false
-          } else {
-            user.id = existingUser._id
-            user.hasPaid = existingUser.hasPaid
-          }
-        } catch (error) {
-          console.error('Error adding Google user to Sanity:', error)
-          return false
-        }
-      }
-      return true
-    },
     async jwt({ token, user, account }) {
       if (user) {
         token.id = user.id
         token.hasPaid = user.hasPaid
+        token.isVerified = user.isVerified
       }
-      if (account?.provider === 'google') {
-        token.id = user.id
-        token.hasPaid = user.hasPaid
+      if (account && account.provider === 'google') {
+        token.isVerified = true // Google accounts are considered verified
       }
       return token
     },
@@ -100,6 +73,7 @@ export const authConfig: AuthConfig = {
       if (session?.user) {
         session.user.id = token.id as string
         session.user.hasPaid = token.hasPaid as boolean
+        session.user.isVerified = token.isVerified as boolean
       }
       return session
     }

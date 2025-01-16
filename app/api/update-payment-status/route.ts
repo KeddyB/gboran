@@ -10,8 +10,6 @@ const client = createClient({
 })
 
 export async function POST(req: Request) {
-
-
   try {
     const { userId, paymentReference } = await req.json()
 
@@ -26,3 +24,4 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: 'Error updating payment status' }, { status: 500 })
   }
 }
+

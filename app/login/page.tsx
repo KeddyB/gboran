@@ -1,11 +1,12 @@
 'use client'
 
-import { useState } from 'react'
-import { signIn } from 'next-auth/react'
+import { useState, useEffect } from 'react'
+import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import Link from 'next/link'
 
 export default function LoginPage() {
   const [isLogin, setIsLogin] = useState(true)
@@ -16,16 +17,24 @@ export default function LoginPage() {
   const [error, setError] = useState('')
   const [message, setMessage] = useState('')
   const router = useRouter()
+  const { data: session, status } = useSession()
+
+  const validatePassword = (password: string) => {
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/
+    return regex.test(password)
+  }
+
+  const getPasswordStrength = (password: string) => {
+    if (password.length === 0) return ''
+    if (password.length < 6) return 'Weak'
+    if (validatePassword(password)) return 'Strong'
+    return 'Medium'
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
     setMessage('')
-
-    if (!isLogin && password !== confirmPassword) {
-      setError("Passwords don't match")
-      return
-    }
 
     if (isLogin) {
       const result = await signIn('credentials', {
@@ -34,11 +43,15 @@ export default function LoginPage() {
         password,
       })
       if (result?.error) {
-        setError(result.error)
+        setError(result.error === "CredentialsSignin" ? "Invalid email or password" : result.error)
       } else {
-        router.push('/')
+        router.push('/payment')
       }
     } else {
+      if (password !== confirmPassword) {
+        setError("Passwords don't match")
+        return
+      }
       try {
         const res = await fetch('/api/auth/register', {
           method: 'POST',
@@ -47,7 +60,7 @@ export default function LoginPage() {
         })
         const data = await res.json()
         if (res.ok) {
-          setMessage(data.message)
+          setMessage('Account created successfully. Please log in.')
           setIsLogin(true)
         } else {
           setError(data.message || 'Registration failed')
@@ -59,9 +72,15 @@ export default function LoginPage() {
     }
   }
 
-  const handleGoogleSignIn = async () => {
-    await signIn('google', { callbackUrl: '/' })
+  const handleGoogleSignIn = () => {
+    signIn('google', { callbackUrl: '/payment' })
   }
+
+  useEffect(() => {
+    if (status === 'authenticated') {
+      router.push('/payment')
+    }
+  }, [status, router])
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-background">
@@ -69,8 +88,8 @@ export default function LoginPage() {
         <h3 className="text-2xl font-bold text-center text-foreground">
           {isLogin ? 'Login to Your Account' : 'Create New Account'}
         </h3>
-        {error && <p className="text-destructive text-sm mt-2">{error}</p>}
-        {message && <p className="text-primary text-sm mt-2">{message}</p>}
+        {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+        {message && <p className="text-green-500 text-sm mt-2">{message}</p>}
         <form onSubmit={handleSubmit} className="mt-4">
           {!isLogin && (
             <div className="mt-4">
@@ -109,6 +128,22 @@ export default function LoginPage() {
               required
               className="mt-1 bg-background text-foreground"
             />
+            {!isLogin && (
+              <p className="text-sm text-muted-foreground mt-1">
+                Password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.
+              </p>
+            )}
+            {!isLogin && (
+              <div className="mt-2">
+                <span className={`text-sm ${
+                  getPasswordStrength(password) === 'Weak' ? 'text-red-500' :
+                  getPasswordStrength(password) === 'Medium' ? 'text-yellow-500' :
+                  'text-green-500'
+                }`}>
+                  Password strength: {getPasswordStrength(password)}
+                </span>
+              </div>
+            )}
           </div>
           {!isLogin && (
             <div className="mt-4">
@@ -138,6 +173,13 @@ export default function LoginPage() {
             </Button>
           </div>
         </form>
+        {isLogin && (
+          <div className="mt-4 text-center">
+            <Link href="/forgot-password" className="text-sm text-primary hover:underline">
+              Forgot Password?
+            </Link>
+          </div>
+        )}
         <div className="mt-4">
           <Button
             onClick={handleGoogleSignIn}

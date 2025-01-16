@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
@@ -11,19 +11,19 @@ const PaystackButton = dynamic(() => import('react-paystack').then((mod) => mod.
 })
 
 export default function PaymentPage() {
-  const { data: session, update } = useSession()
+  const { data: session, status } = useSession()
   const router = useRouter()
-  const [paymentSuccess, setPaymentSuccess] = useState(false)
 
   useEffect(() => {
-    if (session?.user?.hasPaid) {
+    if (status === 'unauthenticated') {
+      router.push('/login')
+    } else if (session?.user?.hasPaid) {
       router.push('/')
     }
-  }, [session, router])
+  }, [session, status, router])
 
   const handlePaymentSuccess = async (reference: any) => {
     try {
-      // Update user's payment status in Sanity
       const res = await fetch('/api/update-payment-status', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -31,17 +31,15 @@ export default function PaymentPage() {
       })
 
       if (res.ok) {
-        setPaymentSuccess(true)
-        await update({ hasPaid: true })
-        setTimeout(() => {
-          signOut({ callbackUrl: '/login' })
-        }, 5000)
+        alert('Payment successful. You will be redirected to the main page.')
+        await signOut({ callbackUrl: '/' })
       } else {
-        alert('Error updating payment status')
+        throw new Error('Error updating payment status')
       }
     } catch (error) {
       console.error('Payment update error:', error)
-      alert('Error processing payment')
+      alert('Error processing payment. Please try again.')
+      router.push('/login')
     }
   }
 
@@ -54,17 +52,8 @@ export default function PaymentPage() {
     onClose: () => alert('Payment cancelled'),
   }
 
-  if (!session || session.user?.hasPaid) return null
-
-  if (paymentSuccess) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-background">
-        <div className="p-8 bg-card text-card-foreground rounded-lg shadow-lg">
-          <h1 className="text-2xl font-bold mb-4">Payment Successful!</h1>
-          <p className="mb-4">Thank you for your payment. You will be logged out in 5 seconds. Please log in again to access the full content.</p>
-        </div>
-      </div>
-    )
+  if (status === 'loading' || !session) {
+    return <div>Loading...</div>
   }
 
   return (
@@ -77,3 +66,4 @@ export default function PaymentPage() {
     </div>
   )
 }
+
