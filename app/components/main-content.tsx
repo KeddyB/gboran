@@ -91,7 +91,7 @@
       </p>
       </div>
       <div className="text-center mt-8">
-      <Button variant="outline" size="lg">
+      <Button variant="outline">
       <Link href="/about">
       Explore Our History
       </Link>
