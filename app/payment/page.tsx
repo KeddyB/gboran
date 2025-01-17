@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
+import { Button } from "@/components/ui/button"
 
 const PaystackButton = dynamic(() => import('react-paystack').then((mod) => mod.PaystackButton), {
   ssr: false,
@@ -12,7 +13,7 @@ const PaystackButton = dynamic(() => import('react-paystack').then((mod) => mod.
 export default function PaymentPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
-  const [ message, setMessage ] = useState('')
+  const [message, setMessage] = useState('')
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -24,14 +25,21 @@ export default function PaymentPage() {
 
   const handlePaymentSuccess = async (reference: any) => {
     try {
+      if (!session?.user?.id) {
+        throw new Error('User ID not found')
+      }
+
       const res = await fetch('/api/update-payment-status', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: session?.user?.id, paymentReference: reference }),
+        body: JSON.stringify({ 
+          userId: session.user.id,
+          paymentReference: reference 
+        }),
       })
 
       if (res.ok) {
-        setMessage('Payment successful. You will be redirected to the login page.')
+        setMessage('Payment successful. You will be redirected to the main page.')
         await signOut({ callbackUrl: '/' })
       } else {
         throw new Error('Error updating payment status')
@@ -58,13 +66,14 @@ export default function PaymentPage() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-background">
-      <p>{message}</p>
       <div className="p-8 bg-card text-card-foreground rounded-lg shadow-lg">
         <h1 className="text-2xl font-bold mb-4">Complete Your Payment</h1>
+        {message && (
+          <p className="mb-4 text-sm text-primary">{message}</p>
+        )}
         <p className="mb-4">Please pay 1000 Naira to access the full content.</p>
         <PaystackButton {...componentProps} className="bg-primary text-primary-foreground px-4 py-2 rounded" />
       </div>
     </div>
   )
 }
-

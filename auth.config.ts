@@ -58,14 +58,44 @@ export const authConfig: AuthConfig = {
     error: '/login',
   },
   callbacks: {
+    async signIn({ user, account }) {
+      if (account?.provider === 'google') {
+        try {
+          const existingUser = await client.fetch(
+            `*[_type == "user" && email == $email][0]`,
+            { email: user.email }
+          )
+
+          if (!existingUser) {
+            // Create new user for Google sign-in
+            const newUser = await client.create({
+              _type: 'user',
+              name: user.name,
+              email: user.email,
+              hasPaid: false,
+              isVerified: true, // Automatically verify Google users
+            })
+            user.id = newUser._id
+          } else {
+            user.id = existingUser._id
+            user.hasPaid = existingUser.hasPaid
+            user.isVerified = true // Ensure existing Google users are verified
+          }
+        } catch (error) {
+          console.error('Error in signIn callback:', error)
+          return false
+        }
+      }
+      return true
+    },
     async jwt({ token, user, account }) {
       if (user) {
         token.id = user.id
         token.hasPaid = user.hasPaid
         token.isVerified = user.isVerified
       }
-      if (account && account.provider === 'google') {
-        token.isVerified = true // Google accounts are considered verified
+      if (account?.provider === 'google') {
+        token.isVerified = true
       }
       return token
     },
@@ -82,3 +112,4 @@ export const authConfig: AuthConfig = {
     strategy: "jwt"
   }
 }
+
