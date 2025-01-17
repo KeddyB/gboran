@@ -43,7 +43,7 @@ export default function PaymentPage() {
       })
 
       if (res.ok) {
-        setMessage('Payment successful. You will be redirected to the main page.')
+        setMessage('Payment successful. You will be redirected to the login page.')
         await signOut({ callbackUrl: '/' })
       } else {
         throw new Error('Error updating payment status')
@@ -71,14 +71,17 @@ export default function PaymentPage() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-background">
       <div className="p-8 bg-card text-card-foreground rounded-lg shadow-lg">
-      {message && (
+      {message ? (
         <div>
-          <h1 className="text-2xl font-bold mb-4">Complete Your Payment</h1>
-          <p className="mb-4 text-sm text-primary">{message}</p>
+          <p className="mb-4 text-xl font-bold text-primary text-green-600">{message}</p>
         </div>
-        )}
-        <p className="mb-4">Please pay 1000 Naira to access the full content.</p>
-        <PaystackButton {...componentProps} className="bg-primary text-primary-foreground px-4 py-2 rounded" />
+      ) : (
+        <>
+          <h1 className="text-2xl font-bold mb-4">Complete Your Payment</h1>
+          <p className="mb-4">Please pay 1000 Naira to access the full content.</p>
+          <PaystackButton {...componentProps} className="bg-blue-500 text-primary-foreground px-4 py-2 rounded" />
+        </>
+      )}
       </div>
     </div>
   )

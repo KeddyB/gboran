@@ -13,7 +13,7 @@ export default function Economy () {
                 alt="Historical site" 
                 width={600} 
                 height={300}
-                className="mb-4"
+                className="mb-4 rounded-md"
               />
               <p className="mb-4 text-justify text-foreground">
                 Farming is the predominant occupation of okeogboran Indigenes male and female, there are 2 categories of farms namely Oko Etile very close to the town and the long-distance farms. In most cases the short distance farms were mainly for the cultivation of food crops and grains namely.

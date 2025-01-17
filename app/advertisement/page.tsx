@@ -9,6 +9,7 @@ const client = createClient({
   dataset: process.env.NEXTPUBLICSANITYDATASET,
   apiVersion: "2024-01-01",
   useCdn: true,
+  token: process.env.NEXTPUBLICSANITYTOKEN,
 })
 
 interface Advertisement {
@@ -33,9 +34,9 @@ export default function AdvertisementPage() {
       const result = await client.fetch(query, params)
       setAds(result)
     }
-
+  console.log(ads)
     fetchAds()
-  }, [])
+  }, [ads])
 
   return (
     <div className="container mx-auto px-4 py-8">

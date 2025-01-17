@@ -16,7 +16,7 @@ export default function History()  {
                 alt="Historical site" 
                 width={600} 
                 height={400}
-                className="mb-4 mx-auto"
+                className="mb-4 mx-auto rounded-md"
               />
               <p className="mb-4 text-justify text-foreground">
                 Okeogboran is a quarter in Supare Akoko, the quarter is bounded in the North by Oriri and Idofin, in the west by Obagure/ Egure, in the south by Ilisa and in the east by Ebiarewa.  
@@ -65,7 +65,7 @@ export default function History()  {
                     alt="Cultural celebration" 
                     width={600} 
                     height={200}
-                    className="mb-4 mx-auto mt-4"
+                    className="mb-4 mx-auto mt-4 rounded-md"
                   />
                   <p className="text-foreground">
                     Ugbo oro was the first site for the OLUNHUNDOLE, the shrine was shifted to Ugbo Omura because of the long distance to the town, hilly and rocky terrain to the town and the complaints from Okeere farmers that their farms and crops were often destroyed by the large crowd following the Olunhundole resulting in poor yield of crops. There was relocation of the site/shrine to (Ugbo Omura) a portion of land reserved as starting point. This episode was the reason why Olunhundole don&apos;t pass through Okeere till today. The Olunhundole doesn&apos;t follow same path twice, there are fixed routes followed by the Olunhundole from the shrine to ITA OKE OGBORAN for save keeping till today. 

@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { FaGoogle } from "react-icons/fa";
 import Link from 'next/link'
 
 export default function LoginPage() {
@@ -185,7 +186,9 @@ export default function LoginPage() {
             onClick={handleGoogleSignIn}
             className="w-full bg-secondary text-secondary-foreground"
           >
-            Sign in with Google
+           <div className="flex justify-center items-center h-full">
+            <FaGoogle />&nbsp;Sign in with Google
+          </div>
           </Button>
         </div>
       </div>

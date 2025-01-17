@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function Education (){
     return (
         <div className="p-8 border-b-2 border-border" id='education'>
@@ -9,6 +11,13 @@ export default function Education (){
               <p className="text-lg font-bold mb-4 text-foreground">
                 Okeogboran is noted for the high level of education of sons and daughters of the quarter, the quarter can rightly be regarded as most literate and educated in Supare.
               </p>
+              <Image 
+                src='/school.jpg' 
+                alt="Historical site" 
+                width={600} 
+                height={300}
+                className="mb-4 rounded-md"
+              />
               <div className="bg-accent text-accent-foreground p-4 mb-6 rounded-lg">
                 <h3 className="text-xl font-bold mb-2">Some of the front liners of Western education include</h3>
                 <ul className="list-disc list-inside space-y-2">

@@ -16,7 +16,7 @@ export default function Religion() {
                 alt="Historical site" 
                 width={600} 
                 height={300}
-                className="mb-4 rounded-sm"
+                className="mb-4 rounded-md"
               />
               <p className="mb-4 text-justify text-foreground">
                 They were initially Traditional worshipers. Some worship Ogun (the gods of Iron) as it reflects on their names; Ogunrotimi, Ogunleye, Ogunyebi to mention few. While some also worship Ifa (Deity), you can easily identify them with the names they answer to, Ifamuwagun, Ifauyi, IFaborode, Ifafeyi, Ifabusuyi e.tc. We also have some who worship Egugun Ara Orun(Masquerade). Our forefathers believed so much in all these deities because they believed they were sent by the &apos;Eledumare&apos;(The Creator of all things). The various gods and goddesses were jointly worshipped and celebrated at different periods of the year. Many OKEOGBORAN Indigenes played Prominent roles in the worship of the various deities and in some cases served as leaders, Late Ojo Ewenla was regarded as the &apos;Bishop&apos; of the traditionalists in Supare until his death.
@@ -29,7 +29,7 @@ export default function Religion() {
                 alt="Historical site" 
                 width={600} 
                 height={300}
-                className="mb-4 rounded-sm"
+                className="mb-4 rounded-md"
               />
               <p className="mb-4 text-justify text-foreground">
                 Years later, things began to change when Islam first came to the Qauter, some eminent leaders embraced the new religion. Among them were ; Late Busari Ojuko(Oluwoye Family), Late Alhaji. Sanni Faborode( He was the first person to study Arabic in the whole of Supare and the first chief imam of Supare, he was the second Muslim to perform the holy pilgrimage to mecca), Late Saliu Ojuko , Late Amusa Faborode., Late Yisa Dada, The children of the above adherents are still practicing Muslims till today. Late Sheikh Ambaliyu SANNI Faborode was a prominent Muslim cleric in Ogun state. 
@@ -53,7 +53,7 @@ export default function Religion() {
                 alt="Historical site" 
                 width={600} 
                 height={300}
-                className="mb-4 rounded-sm"
+                className="mb-4 rounded-md"
               />
               <p className="mb-4 text-justify text-foreground">
                 Christianity was introduced to Supare and in turn to Okeogboran shortly after Islam, many of the Traditional worshipers were converted and became Christians. The Prominent early converts were Late Pa Emmanuel Ariyo ( The Father of Pa Samson Ariyo), Late Pa John Ogunleye of blessed memory, They were member of CMS Church, later they left the denomination to serve as one of the pioneers of Salvation Army Corps Ilemu due to some minor misunderstanding among the worshipers which they couldn&apos;t resolve then. The Christian religion gain much ground in Oke Ogbonran because of the western education that came along with it, as at today larger majority of Oke Ogboran people are Christians and many of the families of early Muslim converts are still practicing the religion and we now have very few Traditional worshipers.
