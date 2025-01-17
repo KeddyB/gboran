@@ -10,7 +10,7 @@ export function AuthHeader() {
 
   return (
     <header className="bg-primary text-primary-foreground p-4 flex justify-between items-center">
-      <h1 className="text-2xl font-bold">Okeogboran</h1>
+      <Link href='/' className="text-2xl font-bold">Okeogboran</Link>
       <div className="flex items-center space-x-4">
         {session && (
           <>

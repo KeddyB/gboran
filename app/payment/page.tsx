@@ -10,6 +10,10 @@ const PaystackButton = dynamic(() => import('react-paystack').then((mod) => mod.
   ssr: false,
 })
 
+// Assuming FancyLoadingScreen is defined elsewhere and imported
+const FancyLoadingScreen = () => <div>Fancy Loading Screen</div>;
+
+
 export default function PaymentPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
@@ -61,15 +65,17 @@ export default function PaymentPage() {
   }
 
   if (status === 'loading' || !session) {
-    return <div>Loading...</div>
+    return <FancyLoadingScreen />
   }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-background">
       <div className="p-8 bg-card text-card-foreground rounded-lg shadow-lg">
-        <h1 className="text-2xl font-bold mb-4">Complete Your Payment</h1>
-        {message && (
+      {message && (
+        <div>
+          <h1 className="text-2xl font-bold mb-4">Complete Your Payment</h1>
           <p className="mb-4 text-sm text-primary">{message}</p>
+        </div>
         )}
         <p className="mb-4">Please pay 1000 Naira to access the full content.</p>
         <PaystackButton {...componentProps} className="bg-primary text-primary-foreground px-4 py-2 rounded" />
@@ -77,3 +83,4 @@ export default function PaymentPage() {
     </div>
   )
 }
+

@@ -5,18 +5,20 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { FancyLoadingScreen } from '@/components/fancy-loading-screen'
 
 export default function ResetPasswordPage() {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState('')
   const [message, setMessage] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const searchParams = useSearchParams()
   const token = searchParams.get('token')
 
   const validatePassword = (password: string) => {
-    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{6,})/
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/
     return regex.test(password)
   }
 
@@ -24,14 +26,17 @@ export default function ResetPasswordPage() {
     e.preventDefault()
     setError('')
     setMessage('')
+    setIsLoading(true)
 
     if (!validatePassword(password)) {
       setError("Password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.")
+      setIsLoading(false)
       return
     }
 
     if (password !== confirmPassword) {
       setError("Passwords don't match")
+      setIsLoading(false)
       return
     }
 
@@ -50,7 +55,13 @@ export default function ResetPasswordPage() {
       }
     } catch (error) {
       setError('An error occurred. Please try again.')
+    } finally {
+      setIsLoading(false)
     }
+  }
+
+  if (isLoading) {
+    return <FancyLoadingScreen />
   }
 
   return (

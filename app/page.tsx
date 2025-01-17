@@ -7,6 +7,7 @@ import { Header } from './components/header'
 import { MainContent } from './components/main-content'
 import { Footer } from './components/footer'
 import { AuthHeader } from '@/components/auth-header'
+import { FancyLoadingScreen } from '@/components/fancy-loading-screen'; // Import the FancyLoadingScreen component
 
 export default function Home() {
   const { data: session, status } = useSession()
@@ -22,7 +23,7 @@ export default function Home() {
   }, [session, status, router])
 
   if (status === 'loading' || !session) {
-    return <div>Loading...</div>
+    return <FancyLoadingScreen />
   }
 
   if (session.user && !session.user.hasPaid) {
